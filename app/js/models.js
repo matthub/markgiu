@@ -326,7 +326,12 @@ markgiu.AppGui = function(){
         self.saveChooser.trigger('click');
     };
     
-       
+
+    self.chooseDirectoryToOpen = function(){
+        self.directoryChooser.trigger('click');
+    };
+
+
     self.openFile = function(path){
         markgiu.fs.readFile(path, 'utf8', function (err,data) {
             if (err) {
