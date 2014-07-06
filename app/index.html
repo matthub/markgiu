@@ -25,6 +25,9 @@
                         <li>
                             <a href="#" data-bind="click:addTabNew"><i class="icon-plus-sign"></i>New File</a>
                         </li>
+                         <li>
+                            <a href="#" data-bind="click:chooseDirectoryToOpen"><i class="icon-file"></i>Open directory</a>
+                        </li>
                         <li>
                             <a href="#" data-bind="click:chooseFileToOpen"><i class="icon-file"></i>Open file</a>
                         </li>
@@ -32,7 +35,7 @@
                 </div>
             </div><!-- top-navbar -->
 
-           
+
             <div id="" class="xcontainer">
                 <!-- ko if: !tabs().length -->
                 <div class="container">
@@ -43,6 +46,7 @@
                             A node-webkit based markdown editor
                             </p>
                             <p>
+                                <button class="btn btn-large btn-primary" data-bind="click: chooseDirectoryToOpen">Open a directory</button>
                                 <button class="btn btn-large btn-primary" data-bind="click: chooseFileToOpen">Open a file</button>
                                 <button class="btn btn-large btn-primary" data-bind="click: addTabNew">Create a new file</button>
                             </p>
