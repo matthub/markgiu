@@ -281,7 +281,18 @@ markgiu.AppGui = function(){
     };
     
     
-    self.bindChoosers = function(cname, sname) {
+    self.bindChoosers = function(dname, cname, sname) {
+        var dchooser = $(dname);
+        self.directoryChooser = dchooser;
+        self.directoryChooser.change(function(evt) {
+            var path = $(this).val();
+            if(!path){
+                return;
+            }
+            self.openDirectory(path);
+            self.directoryChooser.val(null);
+        });
+
         var chooser = $(cname);
         self.chooser = chooser;    
         self.chooser.change(function(evt) {
@@ -325,7 +336,37 @@ markgiu.AppGui = function(){
         });
     };
     
-    
+    self.openDirectory = function(path) {
+        var walk = function(dir, done) {
+            var results = [];
+            markgiu.fs.readdir(dir, function(err, list) {
+                if (err) return done(err);
+                var pending = list.length;
+                if (!pending) return done(null, results);
+                list.forEach(function(file) {
+                    file = dir + '/' + file;
+                    markgiu.fs.stat(file, function(err, stat) {
+                        if (stat && stat.isDirectory()) {
+                            walk(file, function(err, res) {
+                                results = results.concat(res);
+                                if (!--pending) done(null, results);
+                            });
+                        } else {
+                            if (file.indexOf('.md') == file.length-3) results.push(file);
+                            if (!--pending) done(null, results);
+                        }
+                   });
+               });
+           });
+        };
+        walk(path, function(err, results) {
+            if (err) throw err;
+            console.log(results);
+            results.forEach(function(filepath) { self.openFile(filepath); });
+        });
+    };
+
+
     self.saveFileAs = function(path){
         var ct = self.currentTab();
         var ctab = self.tabsDict[ct]();
